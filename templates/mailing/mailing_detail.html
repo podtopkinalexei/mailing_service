@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Рассылка #{{ mailing.id }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="mb-0">Рассылка #{{ mailing.id }}</h2>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Сообщение:</strong>
+                    <p>{{ mailing.message.subject }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Статус:</strong>
+                    <span class="badge 
+                        {% if mailing.status == 'created' %}bg-secondary
+                        {% elif mailing.status == 'started' %}bg-success
+                        {% else %}bg-info{% endif %}">
+                        {{ mailing.get_status_display }}
+                    </span>
+                </div>
+                <div class="mb-3">
+                    <strong>Начало рассылки:</strong>
+                    <p>{{ mailing.start_time|date:"d.m.Y H:i" }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Окончание рассылки:</strong>
+                    <p>{{ mailing.end_time|date:"d.m.Y H:i" }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Клиенты:</strong>
+                    <ul>
+                        {% for client in mailing.clients.all %}
+                        <li>{{ client.full_name }} ({{ client.email }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'mailing:mailing_list' %}" class="btn btn-secondary me-md-2">Назад к списку</a>
+                    <a href="{% url 'mailing:mailing_update' mailing.pk %}" class="btn btn-warning me-md-2">Редактировать</a>
+                    <a href="{% url 'mailing:mailing_delete' mailing.pk %}" class="btn btn-danger me-md-2">Удалить</a>
+                    {% if mailing.status != 'completed' %}
+                    <a href="{% url 'mailing:mailing_send' mailing.pk %}" class="btn btn-success">Отправить</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">Попытки отправки</h3>
+            </div>
+            <div class="card-body">
+                {% if attempts %}
+                <div class="list-group">
+                    {% for attempt in attempts %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between">
+                            <strong>{{ attempt.attempt_time|date:"d.m.Y H:i" }}</strong>
+                            <span class="badge {% if attempt.status == 'success' %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ attempt.get_status_display }}
+                            </span>
+                        </div>
+                        <small class="text-muted">{{ attempt.server_response|default:"-" }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">Попытки отправки отсутствуют</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

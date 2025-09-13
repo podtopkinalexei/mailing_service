@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Попытка рассылки #{{ attempt.id }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">Попытка рассылки #{{ attempt.id }}</h2>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Рассылка:</strong>
+                    <p>#{{ attempt.mailing.id }} - {{ attempt.mailing.message.subject }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Время попытки:</strong>
+                    <p>{{ attempt.attempt_time|date:"d.m.Y H:i:s" }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Статус:</strong>
+                    <span class="badge {% if attempt.status == 'success' %}bg-success{% else %}bg-danger{% endif %}">
+                        {{ attempt.get_status_display }}
+                    </span>
+                </div>
+                <div class="mb-3">
+                    <strong>Ответ сервера:</strong>
+                    <p>{{ attempt.server_response|default:"Нет ответа" }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Клиент:</strong>
+                    <p>{{ attempt.client.full_name }} ({{ attempt.client.email }})</p>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'mailing:attempt_list' %}" class="btn btn-secondary">Назад к списку</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
