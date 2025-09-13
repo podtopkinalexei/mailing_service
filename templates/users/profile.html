@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль пользователя{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0"><i class="bi bi-person"></i> Профиль пользователя</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-4">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="Аватар" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 150px; height: 150px;">
+                                <i class="bi bi-person display-4 text-light"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">Email:</div>
+                            <div class="col-sm-8">{{ user.email }}</div>
+                        </div>
+                        
+                        {% if user.first_name %}
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">Имя:</div>
+                            <div class="col-sm-8">{{ user.first_name }}</div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if user.last_name %}
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">Фамилия:</div>
+                            <div class="col-sm-8">{{ user.last_name }}</div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if user.phone %}
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">Телефон:</div>
+                            <div class="col-sm-8">{{ user.phone }}</div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if user.country %}
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">Страна:</div>
+                            <div class="col-sm-8">{{ user.country }}</div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">Дата регистрации:</div>
+                            <div class="col-sm-8">{{ user.date_joined|date:"d.m.Y H:i" }}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'users:profile_edit' %}" class="btn btn-primary">
+                        <i class="bi bi-pencil"></i> Редактировать профиль
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
