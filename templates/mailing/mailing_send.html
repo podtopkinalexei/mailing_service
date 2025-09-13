@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Отправка рассылки{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-warning">
+                <h2 class="mb-0">Отправка рассылки</h2>
+            </div>
+            <div class="card-body">
+                <p>Вы уверены, что хотите отправить рассылку #{{ mailing.id }}?</p>
+                <p class="text-muted">Сообщение: {{ mailing.message.subject }}</p>
+                <p class="text-muted">Клиентов: {{ mailing.clients.count }}</p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'mailing:mailing_detail' mailing.pk %}" class="btn btn-secondary me-md-2">Отмена</a>
+                        <button type="submit" class="btn btn-warning">Отправить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
